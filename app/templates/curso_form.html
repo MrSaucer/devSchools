@@ -1,0 +1,46 @@
+
+{% extends 'base.html' %}
+
+{% block titulo %}
+    {% if form.instance.pk %}Editar{% else %}Novo{% endif %} Curso - DevSchool
+{% endblock %}
+
+{% block conteudo %}
+    {% if perms.app.change_curso %}
+    
+    <div class="form-wrapper">
+        
+        <h1 class="text-center mb-30" style="color: var(--text-main);">
+            {% if form.instance.pk %}
+                Editar Curso
+            {% else %}
+                Cadastrar Novo Curso
+            {% endif %}
+        </h1>
+
+        <form method="post">
+            <!-- CSRF valida as informações de envio, garantindo a segurança da requisição-->
+            {% csrf_token %}
+            
+            <div class="django-raw-form">
+                <!-- form.as_p cria automaticamente o formulario nos conformes do modelo Curso -->
+                {{ form.as_p }}
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button type="submit" class="btn btn-primary">
+                    Salvar
+                </button>
+                
+                <a href="/" class="btn btn-outline" style="text-decoration: none; text-align: center;">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+
+    </div>
+    {% else %}
+    <h1 class="text-center mb-30" style="color: var(--text-main);">Você precisa ter permissão para acessar essa página</h1>
+
+    {% endif %}
+{% endblock %}

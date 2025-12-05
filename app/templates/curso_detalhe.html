@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{{ curso.nome }} - Detalhes{% endblock %}
+
+{% block conteudo %}
+  
+  <div class="detail-wrapper">
+    
+    <div class="detail-card">
+      
+      <div class="detail-header">
+        <span class="badge-level">{{ curso.nivel }}</span>
+        <h1 class="detail-title">{{ curso.nome }}</h1>
+      </div>
+
+      <div class="detail-stats">
+        <div class="stat-item">
+            <label>Instrutor</label>
+            <span>{{ curso.instrutor }}</span>
+        </div>
+        <div class="stat-item">
+            <label>Carga Horária</label>
+            <span>{{ curso.carga_horaria }} horas</span>
+        </div>
+        <div class="stat-item">
+            <label>Certificado</label>
+            <span>Sim, incluso</span>
+        </div>
+      </div>
+      
+      <div class="detail-description">
+        <h3 style="color: var(--text-main); margin-bottom: 15px;">Sobre o Curso</h3>
+        {{ curso.descricao|linebreaks }}
+      </div>
+      
+      <div class="detail-actions" style="justify-content: space-between; align-items: center;">
+        
+        <div>
+            <a href="/" class="btn btn-outline" style="text-decoration: none;">
+                ← Voltar
+            </a>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+
+              {% if perms.app.change_curso %}
+                <a href="{% url 'curso_editar' curso.pk %}" class="btn btn-primary" style="text-decoration: none; background-color: #f59e0b; color: #fff;">
+                    Editar
+                </a>
+              {% endif %}
+
+              {% if perms.app.delete_curso %}
+                <a href="{% url 'curso_deletar' curso.pk %}" class="btn btn-danger" style="text-decoration: none;">
+                    Excluir
+                </a>
+                {% endif %}
+            
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock %}

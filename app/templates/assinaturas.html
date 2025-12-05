@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Planos e Preços - DevSchool{% endblock %}
+
+{% block conteudo %}
+    
+    <div class="container">
+        <h1 class="text-center mb-30" style="color: var(--text-main);">Escolha seu Plano de Estudos</h1>
+        
+        <div class="plans-container">
+            
+            {% for plano in planos %}
+                <div class="plan-card {% if plano.destaque %}highlight{% endif %}">
+                    
+                    {% if plano.destaque %}
+                        <div class="badge-recommended">Recomendado</div>
+                    {% endif %}
+
+                    <h2 class="plan-name">{{ plano.nome }}</h2>
+                    
+                    <div class="plan-price">
+                        R$ {{ plano.preco }}
+                    </div>
+                    
+                    <div class="plan-benefits">
+                        {{ plano.beneficios }}
+                    </div>
+
+                    <button class="btn-plan {% if plano.destaque %}btn-highlight{% else %}btn-outline{% endif %}">
+                        Assinar {{ plano.nome }}
+                    </button>
+
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
