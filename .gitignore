@@ -1,0 +1,12 @@
+# Arquivos que NÃO devem ir para o GitHub
+
+# Ambientes virtuais
+venv/
+*.env
+
+# Banco de Dados
+db.sqlite3
+
+# Arquivos de Python
+__pycache__/
+*.pyc
