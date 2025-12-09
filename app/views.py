@@ -4,6 +4,8 @@ from .forms import CursoForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.models import Group # <-- Importação para cadastro usuario do grupo Cliente
+import requests # A biblioteca padrão de mercado para APIs
+from django.contrib import messages # Para dar feedback ao usuário
 
 
 def home_view(request):
@@ -21,9 +23,6 @@ def home_view(request):
 
 def metodologia_view(request):
     return render(request, 'metodologia.html')
-
-def contato_view(request):
-    return render(request, 'contato.html')
 
 def assinaturas_view(request):
     todas_as_assinaturas=Plano.objects.all()
@@ -101,3 +100,46 @@ def cadastro_view(request):
         form = UserCreationForm()
     
     return render(request,'registration/cadastro.html',{'form': form})
+
+def contato_view(request):
+    if request.method == 'POST':
+        # 1. Pegar os dados do formulário
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        # 2. Configurar a API do EmailJS (Backend)
+        # Na vida real, estas chaves ficariam no .env!
+        service_id = 'service_cmc47cz'
+        template_id = 'template_doa9i9d'
+        user_id = 'u8BgNyrmh9VGjmfgf' # No backend eles chamam de User ID muitas vezes
+        
+        # 3. Montar o pacote de dados (Payload)
+        payload = {
+            'service_id': service_id,
+            'template_id': template_id,
+            'user_id': user_id,
+            'template_params': {
+                'from_name': name,
+                'reply_to': email,
+                'message': message
+            }
+        }
+        
+        # 4. Consumir a API (Fazer o Request)
+        try:
+            response = requests.post(
+                'https://api.emailjs.com/api/v1.0/email/send',
+                json=payload # O requests converte ditado para JSON automaticamente
+            )
+            
+            # 5. Verificar se deu certo (Status 200 = OK)
+            if response.status_code == 200:
+                messages.success(request, 'E-mail enviado com sucesso!')
+            else:
+                messages.error(request, 'Erro ao enviar e-mail. Tente novamente.')
+                
+        except Exception as e:
+            messages.error(request, f'Erro de conexão: {e}')
+            
+    return render(request, 'contato.html')

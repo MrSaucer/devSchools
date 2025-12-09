@@ -1,40 +1,33 @@
 {% extends 'base.html' %}
-
-{% block titulo %}Fale Conosco - DevSchool{% endblock %}
-
 {% block conteudo %}
+<div class="form-wrapper">
+    <h1>Fale Conosco</h1>
     
-    <div class="form-wrapper">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
         
-        <h1 class="text-center mb-30">Fale Conosco</h1>
-        
-        <div class="alert-warning">
-            <strong>⚠️ Atenção:</strong> Este formulário é apenas uma simulação visual (Front-end). <br>
-            O envio de dados será implementado nas próximas aulas.
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" name="name" class="form-control" required>
         </div>
 
-        <form>
-            
-            <div class="form-group">
-                <label for="id_nome">Nome:</label>
-                <input type="text" id="id_nome" class="form-control" placeholder="Digite seu nome">
-            </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
 
-            <div class="form-group">
-                <label for="id_email">E-mail:</label>
-                <input type="email" id="id_email" class="form-control" placeholder="seu@email.com">
-            </div>
+        <div class="form-group">
+            <label>Mensagem</label>
+            <textarea name="message" class="form-control" required></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="id_mensagem">Mensagem:</label>
-                <textarea id="id_mensagem" class="form-control" placeholder="Como podemos te ajudar?"></textarea>
-            </div>
-            
-            <button type="button" class="btn btn-primary" onclick="alert('Formulário Simulado! Nada foi enviado.')">
-                Enviar Mensagem
-            </button>
-
-        </form>
-    </div>
-
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
 {% endblock %}
